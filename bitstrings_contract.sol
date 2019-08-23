@@ -37,7 +37,7 @@ contract Bitstrings {
     
     
 //////////HELPER CONVERSION FUNCTIONS//////////
-    function bytes32toBytesArray (bytes32 data) private returns (bytes) {
+    function bytes32toBytesArray (bytes32 data) private pure returns (bytes) {
         bytes memory bytesArray = new bytes(32);
         for (uint j=0; j<32; j++) {
           byte char = byte(bytes32(uint(data) * 2 ** (8 * j)));
@@ -48,13 +48,13 @@ contract Bitstrings {
         return bytesArray;
     }
     
-    function bytes32toBytes1(bytes32 b) private returns(uint) {
+    function bytes32toBytes1(bytes32 b) private pure returns(uint) {
         return uint(b);
     }
     
     
 //////////RANDOMIZER FUNCTIONS////////// 
-    function randomizer() private returns (string) {
+    function randomizer() private view returns (string) {
         //random int
         uint random_int = (now + 16 )% 17;
         
@@ -76,7 +76,7 @@ contract Bitstrings {
     }
     
     //keeps retrying if it number already exists
-    function nonrepeat_randomizer() private constant returns (string) {
+    function nonrepeat_randomizer() public returns (string) { //TODO explore payable
         //random int
         uint random_int = (now + 15 )% 16; // %16 yields numbers 0-15, and +15 ensures we don't don't get a div by 0 error
         
