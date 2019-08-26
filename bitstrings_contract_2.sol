@@ -28,7 +28,7 @@ contract Bitstrings {
     mapping(address => user) public users;
     mapping(address => bool) private userExists;
     mapping(uint => bool) private existingInts; //for internal checking purposes
-    
+     
     // store user count - proxy for bitstring count as well
     uint public userAndBitStringCount = 0;
     
@@ -39,32 +39,15 @@ contract Bitstrings {
         generate(msg.sender); //upon deployment of contract, address/account that deploys is stored (?)
     }
     
-    
-//////////HELPER CONVERSION FUNCTIONS//////////
-    function bytes32toBytesArray (bytes32 data) private pure returns (bytes) {
-        bytes memory bytesArray = new bytes(32);
-        for (uint j=0; j<32; j++) {
-          byte char = byte(bytes32(uint(data) * 2 ** (8 * j)));
-          if (char != 0) {
-            bytesArray[j] = char;
-          }
-        }
-        return bytesArray;
-    }
-    
-    function bytes32toBytes1(bytes32 b) private pure returns(uint) {
-        return uint(b);
-    }
-    
-    
+
 //////////RANDOMIZER FUNCTIONS////////// 
-    function randomizer() public view returns (string) {
+    function randomizer() public view returns (string) { //public randomizer function, dependent on current block, eep!
         uint random_number = uint(block.blockhash(block.number-1))%16; //0-15
         string bitstring = bitstring_map[random_number];
         return bitstring;
     }
 
-    function random() public returns (uint) { //ERROR: no output
+    function random() public returns (uint) { //generates a random-ish number from 0-15 based on what hasn't been assigned yet
         uint random_number = uint(block.blockhash(block.number-1))%16; //0-15
         while(existingInts[random_number] != false){
             if(random_number == 15){
