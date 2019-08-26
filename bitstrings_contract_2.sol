@@ -1,4 +1,6 @@
 //under construction: previous method of generation was ineffective (storing empty strings)
+//deployment at: https://ropsten.etherscan.io/tx/0x3f383a855132e67e02e1e5e9f90f773e4adf4715d9b5697b3b79cdf8cfede8cb#eventlog
+
 pragma solidity ^0.4.2;
 
 //need to do a check on bitstrings that already exist
