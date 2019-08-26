@@ -20,7 +20,7 @@ contract Bitstrings {
     }
     
     // store "users" or accounts
-    mapping(address => user) private users;
+    mapping(address => user) public users;
     mapping(address => bool) private userExists;
     mapping(string => bool) private bitstrings; //bitstrings doesnt !!
     mapping(uint => bool) private existingInts; //for internal checking purposes
@@ -32,7 +32,7 @@ contract Bitstrings {
 //////////CONSTRUCTOR//////////
     function Bitstrings () public {
         //executes upon call
-        generate(msg.sender);
+        generate(msg.sender); //upon deployment of contract, address/account that deploys is stored (?)
     }
     
     
@@ -54,9 +54,14 @@ contract Bitstrings {
     
     
 //////////RANDOMIZER FUNCTIONS////////// 
-    function randomizer() private view returns (string) {
+    function random() public returns (uint8) { //ERROR: no output
+        return uint8((uint256(keccak256(block.timestamp, block.difficulty))+1)%251); //do i need to have +1 in case starts as 0?
+        //check conversion: test with hardcoded value 
+    }
+
+    function randomizer() public view returns (string) {
         //random int
-        uint random_int = (now + 16 )% 17;
+        uint random_int = (random() + 1)% 17;
         
         //int to bytes32
         bytes32 random_bytes = bytes32(random_int); 
@@ -76,7 +81,7 @@ contract Bitstrings {
     }
     
     //keeps retrying if it number already exists
-    function nonrepeat_randomizer() public returns (string) { //TODO explore payable
+    function nonrepeat_randomizer() private returns (string) { //TODO explore payable
         //random int
         uint random_int = (now + 15 )% 16; // %16 yields numbers 0-15, and +15 ensures we don't don't get a div by 0 error
         
@@ -95,13 +100,14 @@ contract Bitstrings {
         bytes memory random_bytes32Array= bytes32toBytesArray(random_bytes);
         bytes memory result = new bytes(32);
         
-        uint256 startIndex = 4;
-        uint256 endIndex = 7;
+        uint256 startIndex = 28;
+        uint256 endIndex = 31;
         for(uint256 i = startIndex; i < endIndex; i++) {
             result[i-startIndex] = random_bytes32Array[i]; //result and test_byte need to be bytes w index access
         }
         
-         return string(result); 
+        return string(result); 
+       
     }
     
 
